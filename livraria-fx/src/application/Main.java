@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 
 import br.com.casadocodigo.livraria.produtos.Produto;
+import dao.ProdutoDAO;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -17,9 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.stage.Stage;
-import repositorio.RepositorioDeProdutos;
 import util.Exportador;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class Main extends Application {
 
 	@Override
@@ -37,7 +38,7 @@ public class Main extends Application {
 		label.setFont(Font.font("Lucida Grande", FontPosture.REGULAR, 30));
 		label.setPadding(new Insets(20, 0, 10, 10));
 
-		ObservableList<Produto> produtos = new RepositorioDeProdutos().lista();
+		ObservableList<Produto> produtos = new ProdutoDAO().lista();
 
 		TableView<Produto> tableView = new TableView<>(produtos);
 		TableColumn nomeColumn = new TableColumn("Nome");

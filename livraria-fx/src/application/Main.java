@@ -1,11 +1,14 @@
 package application;
 
+import java.io.IOException;
+
 import br.com.casadocodigo.livraria.produtos.Produto;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,10 +18,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.stage.Stage;
 import repositorio.RepositorioDeProdutos;
+import util.Exportador;
 
 public class Main extends Application {
+
 	@Override
 	public void start(Stage primaryStage) {
+
+		Button button = new Button("Exportar CSV");
+		button.setLayoutX(575);
+		button.setLayoutY(25);
 
 		Group group = new Group();
 		Scene scene = new Scene(group, 690, 510);
@@ -49,11 +58,21 @@ public class Main extends Application {
 		VBox vbox = new VBox(tableView);
 		vbox.setPadding(new Insets(70, 0, 0, 10));
 
-		group.getChildren().addAll(label, vbox);
+		group.getChildren().addAll(label, vbox, button);
+
+		button.setOnAction(evnt -> exportaEmCSV(produtos));
 
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Sistema de livraria com JavaFX");
 		primaryStage.show();
+	}
+
+	private void exportaEmCSV(ObservableList<Produto> produtos) {
+		try {
+			new Exportador().paraCSV(produtos);
+		} catch (IOException e) {
+			System.out.println("Erro ao exportar: " + e);
+		}
 	}
 
 	public static void main(String[] args) {

@@ -1,1 +1,31 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+#label-listagem {
+	-fx-font-size: 30.0px;
+	-fx-padding: 20.0 0.0 10.0 10.0;
+}
+#label-progresso {
+	-fx-translate-x: 485.0;
+	-fx-translate-y: 30.0;
+}
+.table-view {
+	-fx-min-width: 665.0;
+	-fx-max-width: 665.0;
+}
+.table-column {
+	-fx-padding: 0.0 0.0 0.0 10.0;
+}
+#vbox {
+	-fx-padding: 70.0 0.0 0.0 10.0;
+}
+.button {
+	-fx-translate-x: 575.0;
+	-fx-translate-y: 25.0;
+	-fx-background-color: rgb(31.0, 149.0, 206.0);
+	-fx-text-fill: white;
+}
+.button:hover {
+	-fx-background-color: rgba(31.0, 149.0, 206.0, 0.71);
+}
+#label-footer {
+	-fx-font-size: 15.0px;
+	-fx-translate-x: 210.0;-fx-translate-y: 480.0;
+}

@@ -1,14 +1,12 @@
 package application;
 
 import java.io.IOException;
-import java.text.Collator;
 
 import br.com.casadocodigo.livraria.produtos.Produto;
 import dao.ProdutoDAO;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,8 +15,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.stage.Stage;
 import util.Exportador;
 
@@ -29,16 +25,13 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		Button button = new Button("Exportar CSV");
-		button.setLayoutX(575);
-		button.setLayoutY(25);
 
 		Group group = new Group();
 		Scene scene = new Scene(group, 690, 510);
 		primaryStage.setScene(scene);
 
 		Label label = new Label("Listagem de Livros");
-		label.setFont(Font.font("Lucida Grande", FontPosture.REGULAR, 30));
-		label.setPadding(new Insets(20, 0, 10, 10));
+		label.setId("label-listagem");
 
 		ObservableList<Produto> produtos = new ProdutoDAO().lista();
 
@@ -59,13 +52,19 @@ public class Main extends Application {
 		tableView.getColumns().addAll(nomeColumn, descColumn, valorColumn, isbnColumn);
 
 		VBox vbox = new VBox(tableView);
-		vbox.setPadding(new Insets(70, 0, 0, 10));
+		vbox.setId("vbox");
 
 		Label progresso = new Label();
-		progresso.setLayoutX(485);
-		progresso.setLayoutY(30);
+		progresso.setId("label-progresso");
 
-		group.getChildren().addAll(label, vbox, button, progresso);
+		double valorTotal = produtos.stream().mapToDouble(Produto::getValor).sum();
+		Label labelFooter = new Label(String.format(
+				"Você tem R$%.2f em estoque, "
+						+ "com um total de %d produtos.",
+				valorTotal, produtos.size()));
+		labelFooter.setId("label-footer");
+
+		group.getChildren().addAll(label, vbox, button, progresso, labelFooter);
 
 		button.setOnAction(evnt -> {
 			Task<Void> task = new Task<Void>() {
@@ -83,6 +82,8 @@ public class Main extends Application {
 
 			new Thread(task).start();
 		});
+
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Sistema de livraria com JavaFX");

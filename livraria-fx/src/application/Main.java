@@ -18,9 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import util.Exportador;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public class Main extends Application {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) {
 
@@ -35,19 +35,12 @@ public class Main extends Application {
 
 		ObservableList<Produto> produtos = new ProdutoDAO().lista();
 
-		TableView<Produto> tableView = new TableView<>(produtos);
-		TableColumn nomeColumn = new TableColumn("Nome");
-		nomeColumn.setMinWidth(180);
-		nomeColumn.setCellValueFactory(new PropertyValueFactory("nome"));
-		TableColumn descColumn = new TableColumn("Descrição");
-		descColumn.setMinWidth(230);
-		descColumn.setCellValueFactory(new PropertyValueFactory("descricao"));
-		TableColumn valorColumn = new TableColumn("Valor");
-		valorColumn.setMinWidth(60);
-		valorColumn.setCellValueFactory(new PropertyValueFactory("valor"));
-		TableColumn isbnColumn = new TableColumn("ISBN");
-		isbnColumn.setMinWidth(180);
-		isbnColumn.setCellValueFactory(new PropertyValueFactory("isbn"));
+		TableView<Produto> tableView = new TableView<Produto>(produtos);
+		
+		TableColumn<Produto, String> nomeColumn = criaColuna("Nome", 180, "nome");
+		TableColumn<Produto, String> descColumn = criaColuna("Descrição", 230, "descricao");
+		TableColumn<Produto, String> valorColumn = criaColuna("Valor", 60, "valor");
+		TableColumn<Produto, String> isbnColumn = criaColuna("ISBN", 180, "isbn");
 
 		tableView.getColumns().addAll(nomeColumn, descColumn, valorColumn, isbnColumn);
 
@@ -58,9 +51,7 @@ public class Main extends Application {
 		progresso.setId("label-progresso");
 
 		double valorTotal = produtos.stream().mapToDouble(Produto::getValor).sum();
-		Label labelFooter = new Label(String.format(
-				"Você tem R$%.2f em estoque, "
-						+ "com um total de %d produtos.",
+		Label labelFooter = new Label(String.format("Você tem R$%.2f em estoque, " + "com um total de %d produtos.",
 				valorTotal, produtos.size()));
 		labelFooter.setId("label-footer");
 
@@ -108,5 +99,12 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	private TableColumn<Produto, String> criaColuna(String titulo, int largura, String atributo) {
+		TableColumn<Produto, String> column = new TableColumn<Produto, String>(titulo);
+		column.setMinWidth(largura);
+		column.setCellValueFactory(new PropertyValueFactory<Produto, String>(atributo));
+		return column;
 	}
 }
